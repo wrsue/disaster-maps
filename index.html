@@ -33,7 +33,7 @@
   <div>
     <h1>陸上強風特報(黃色燈號)</h1>
     <div class="sub">
-      生效：2026-02-18 10:28 ～ 2026-02-19 16:00（TPE）｜影響：13 縣市 （精確鄉鎮：52 個，縣市層級顯示）｜🔴 生效中<br/>
+      生效：2026-02-18 10:28 ～ 2026-02-19 16:00（TPE）｜影響：13 縣市 （精確鄉鎮：52 個）｜🔴 生效中<br/>
       資料來源：CWA CAP | 發布：2026-02-18 10:29
     </div>
   </div>
@@ -51,56 +51,84 @@
   <span>📅 2026-02-18 10:29 TPE</span>
 </div>
 <script>
+const WARNING_AREAS = new Set(["新北市三芝區", "新北市淡水區", "桃園市觀音區", "桃園市新屋區", "桃園市蘆竹區", "新竹市北區", "新竹市香山區", "新竹縣新豐鄉", "新竹縣竹北市", "苗栗縣苑裡鎮", "苗栗縣通霄鎮", "苗栗縣後龍鎮", "苗栗縣西湖鄉", "臺中市清水區", "臺中市大甲區", "臺中市外埔區", "臺中市大安區", "臺中市龍井區", "臺中市梧棲區", "彰化縣福興鄉", "彰化縣線西鄉", "彰化縣鹿港鎮", "彰化縣伸港鄉", "彰化縣芳苑鄉", "彰化縣二林鎮", "彰化縣大城鄉", "雲林縣東勢鄉", "雲林縣臺西鄉", "雲林縣麥寮鄉", "雲林縣四湖鄉", "雲林縣水林鄉", "雲林縣口湖鄉", "嘉義縣東石鄉", "嘉義縣六腳鄉", "臺南市北門區", "臺南市七股區", "臺南市將軍區", "臺南市安南區", "屏東縣恆春鎮", "屏東縣滿州鄉", "屏東縣車城鄉", "屏東縣牡丹鄉", "臺東縣綠島鄉", "臺東縣蘭嶼鄉", "臺東縣卑南鄉", "臺東縣成功鎮", "澎湖縣望安鄉", "澎湖縣湖西鄉", "澎湖縣白沙鄉", "澎湖縣七美鄉", "澎湖縣西嶼鄉", "澎湖縣馬公市"]);
 const WARNING_COUNTIES = new Set(["嘉義縣", "屏東縣", "彰化縣", "新北市", "新竹市", "新竹縣", "桃園市", "澎湖縣", "臺中市", "臺南市", "臺東縣", "苗栗縣", "雲林縣"]);
-const RAW_AREAS = ["新北市三芝區", "新北市淡水區", "桃園市觀音區", "桃園市新屋區", "桃園市蘆竹區", "新竹市北區", "新竹市香山區", "新竹縣新豐鄉", "新竹縣竹北市", "苗栗縣苑裡鎮", "苗栗縣通霄鎮", "苗栗縣後龍鎮", "苗栗縣西湖鄉", "臺中市清水區", "臺中市大甲區", "臺中市外埔區", "臺中市大安區", "臺中市龍井區", "臺中市梧棲區", "彰化縣福興鄉", "彰化縣線西鄉", "彰化縣鹿港鎮", "彰化縣伸港鄉", "彰化縣芳苑鄉", "彰化縣二林鎮", "彰化縣大城鄉", "雲林縣東勢鄉", "雲林縣臺西鄉", "雲林縣麥寮鄉", "雲林縣四湖鄉", "雲林縣水林鄉", "雲林縣口湖鄉", "嘉義縣東石鄉", "嘉義縣六腳鄉", "臺南市北門區", "臺南市七股區", "臺南市將軍區", "臺南市安南區", "屏東縣恆春鎮", "屏東縣滿州鄉", "屏東縣車城鄉", "屏東縣牡丹鄉", "臺東縣綠島鄉", "臺東縣蘭嶼鄉", "臺東縣卑南鄉", "臺東縣成功鎮", "澎湖縣望安鄉", "澎湖縣湖西鄉", "澎湖縣白沙鄉", "澎湖縣七美鄉"];
 const IS_TOWNSHIP = true;
 const MAP_COLOR = "#FFFF00";
 const HEADLINE = "陸上強風特報(黃色燈號)";
 const EFFECTIVE = "2026-02-18 10:28";
 const EXPIRES = "2026-02-19 16:00";
-const DESCRIPTION = "東北風偏強，18日上午至19日下午新北市、桃園市、新竹市、新竹縣、苗栗縣、臺中市、彰化縣、雲林縣、嘉義縣、臺南市、屏東縣、臺東縣(含蘭嶼、綠島)、澎湖縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。";
 const WEB_URL = "https://www.cwa.gov.tw/V8/C/P/Warning/W25.html";
+const TOWNSHIP_URL = "https://wrsue.github.io/disaster-maps/townships.geojson";
+const COUNTY_URL = "https://raw.githubusercontent.com/g0v/twgeojson/master/json/twCounty2010.geo.json";
 
 const NORMALIZE = {"台東縣":"臺東縣","台南市":"臺南市","台中市":"臺中市","台北市":"臺北市","桃園縣":"桃園市"};
 function norm(n){return NORMALIZE[n]||n;}
-function isWarn(n){return WARNING_COUNTIES.has(norm(n))||WARNING_COUNTIES.has(n);}
 
 const map = L.map('map',{center:[23.5,121.0],zoom:7});
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
   attribution:'© OpenStreetMap contributors © CARTO',subdomains:'abcd',maxZoom:19
 }).addTo(map);
 
-function style(f){
-  const w=isWarn(f.properties.COUNTYNAME||f.properties.name||'');
-  return {fillColor:w?MAP_COLOR:'#4CAF50',weight:1.2,opacity:1,color:'#fff',fillOpacity:w?.72:.45};
-}
-
 let gl;
-function onEach(f,layer){
-  const raw=f.properties.COUNTYNAME||f.properties.name||'';
-  const nm=norm(raw);
-  const w=isWarn(raw);
-  // 鄉鎮清單（若有）
-  const towns=IS_TOWNSHIP&&w?RAW_AREAS.filter(a=>a.startsWith(nm.replace('臺','台'))||a.startsWith(nm)):[];
-  const townHtml=towns.length>0?`<div class="ta"><b>警戒鄉鎮：</b><br/>`+towns.join('、')+'</div>':'';
-  const pop=`<div class="pt">${nm}</div>
-    <span class="ps ${w?'pw':'pc'}">${w?'⚠️ '+HEADLINE:'✅ 無特報'}</span>
-    ${w?`<div class="pi">⏰ ${EFFECTIVE} ～ ${EXPIRES}</div>`+townHtml:''}
-    ${WEB_URL&&w?`<div style="margin-top:6px"><a href="${WEB_URL}" target="_blank" style="color:#64b5f6;font-size:.75rem">📎 官方連結</a></div>`:''}`;
-  layer.bindPopup(pop,{maxWidth:260});
-  layer.on({
-    mouseover:e=>e.target.setStyle({weight:2.5,color:'#FFD700',fillOpacity:.9}),
-    mouseout:e=>gl.resetStyle(e.target),
-    click:e=>map.fitBounds(e.target.getBounds(),{padding:[30,30]})
-  });
-}
 
-fetch('https://raw.githubusercontent.com/g0v/twgeojson/master/json/twCounty2010.geo.json')
-  .then(r=>r.json())
-  .then(data=>{
-    gl=L.geoJSON(data,{style:style,onEachFeature:onEach}).addTo(map);
-  })
-  .catch(e=>console.error('GeoJSON error:',e));
+if (IS_TOWNSHIP) {
+  // 鄉鎮層級地圖
+  fetch(TOWNSHIP_URL).then(r=>r.json()).then(data=>{
+    gl = L.geoJSON(data, {
+      style: f => {
+        const town = f.properties.TOWNNAME||'';
+        const county = norm(f.properties.COUNTYNAME||'');
+        const key1 = county + town;
+        const key2 = county.replace('臺','台') + town;
+        const w = WARNING_AREAS.has(key1) || WARNING_AREAS.has(key2) || WARNING_AREAS.has(town);
+        return {fillColor:w?MAP_COLOR:'#4CAF50',weight:0.8,opacity:1,color:'rgba(255,255,255,0.4)',fillOpacity:w?.78:.35};
+      },
+      onEachFeature: (f,layer) => {
+        const town = f.properties.TOWNNAME||'';
+        const county = norm(f.properties.COUNTYNAME||'');
+        const key1 = county + town;
+        const key2 = county.replace('臺','台') + town;
+        const w = WARNING_AREAS.has(key1)||WARNING_AREAS.has(key2)||WARNING_AREAS.has(town);
+        const pop=`<div class="pt">${county} ${town}</div>
+          <span class="ps ${w?'pw':'pc'}">${w?'⚠️ '+HEADLINE:'✅ 無特報'}</span>
+          ${w?`<div class="pi">⏰ ${EFFECTIVE} ～ ${EXPIRES}</div>`:''}
+          ${WEB_URL&&w?`<div style="margin-top:6px"><a href="${WEB_URL}" target="_blank" style="color:#64b5f6;font-size:.75rem">📎 官方連結</a></div>`:''}`;
+        layer.bindPopup(pop,{maxWidth:240});
+        layer.on({
+          mouseover:e=>e.target.setStyle({weight:2,color:'#FFD700',fillOpacity:.95}),
+          mouseout:e=>gl.resetStyle(e.target),
+          click:e=>map.fitBounds(e.target.getBounds(),{padding:[40,40]})
+        });
+      }
+    }).addTo(map);
+  }).catch(e=>console.error('Township GeoJSON error:',e));
+} else {
+  // 縣市層級地圖
+  fetch(COUNTY_URL).then(r=>r.json()).then(data=>{
+    gl = L.geoJSON(data, {
+      style: f => {
+        const nm = norm(f.properties.COUNTYNAME||f.properties.name||'');
+        const w = WARNING_COUNTIES.has(nm)||WARNING_COUNTIES.has(f.properties.COUNTYNAME||'');
+        return {fillColor:w?MAP_COLOR:'#4CAF50',weight:1.2,opacity:1,color:'#fff',fillOpacity:w?.72:.45};
+      },
+      onEachFeature: (f,layer) => {
+        const nm = norm(f.properties.COUNTYNAME||f.properties.name||'');
+        const w = WARNING_COUNTIES.has(nm);
+        const pop=`<div class="pt">${nm}</div>
+          <span class="ps ${w?'pw':'pc'}">${w?'⚠️ '+HEADLINE:'✅ 無特報'}</span>
+          ${w?`<div class="pi">⏰ ${EFFECTIVE} ～ ${EXPIRES}</div>`:''}
+          ${WEB_URL&&w?`<div style="margin-top:6px"><a href="${WEB_URL}" target="_blank" style="color:#64b5f6;font-size:.75rem">📎 官方連結</a></div>`:''}`;
+        layer.bindPopup(pop,{maxWidth:240});
+        layer.on({
+          mouseover:e=>e.target.setStyle({weight:2.5,color:'#FFD700',fillOpacity:.9}),
+          mouseout:e=>gl.resetStyle(e.target),
+          click:e=>map.fitBounds(e.target.getBounds(),{padding:[30,30]})
+        });
+      }
+    }).addTo(map);
+  }).catch(e=>console.error('County GeoJSON error:',e));
+}
 </script>
 </body>
 </html>
