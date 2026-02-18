@@ -1,147 +1,106 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>陸上強風特報 | 2026-02-18 | 災害警戒地圖</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>陸上強風特報(黃色燈號) | 災害警戒地圖</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Noto Sans TC', '微軟正黑體', sans-serif; background: #1a1a2e; color: #eee; }
-    #header {
-      background: linear-gradient(135deg, #16213e, #0f3460);
-      padding: 14px 20px;
-      border-bottom: 2px solid #e94560;
-      display: flex; align-items: center; gap: 14px;
-    }
-    #header .icon { font-size: 2.2rem; }
-    #header h1 { font-size: 1.2rem; margin-bottom: 4px; }
-    #header .subtitle { font-size: 0.8rem; color: #aac4e0; }
-    #map { width: 100%; height: calc(100vh - 130px); }
-    #legend {
-      position: absolute; bottom: 30px; right: 10px; z-index: 1000;
-      background: rgba(22, 33, 62, 0.93);
-      border: 1px solid #444; border-radius: 8px;
-      padding: 12px 16px; min-width: 200px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    }
-    #legend h4 { font-size: 0.85rem; margin-bottom: 8px; color: #aac4e0; letter-spacing: 1px; }
-    .legend-item { display: flex; align-items: center; gap: 8px; margin: 5px 0; font-size: 0.82rem; }
-    .legend-color { width: 16px; height: 16px; border-radius: 3px; flex-shrink: 0; }
-    #info-bar {
-      background: #16213e; border-top: 1px solid #333;
-      padding: 6px 20px; font-size: 0.75rem; color: #889;
-      display: flex; justify-content: space-between;
-    }
-    .popup-title { font-weight: bold; font-size: 1rem; margin-bottom: 4px; }
-    .popup-status { padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; display: inline-block; margin-bottom: 6px; }
-    .popup-warning { background: #FF4444; color: white; }
-    .popup-clear { background: #4CAF50; color: white; }
-    .popup-time { font-size: 0.78rem; color: #555; }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Noto Sans TC','微軟正黑體',sans-serif;background:#1a1a2e;color:#eee}
+    #header{background:linear-gradient(135deg,#16213e,#0f3460);padding:12px 18px;border-bottom:3px solid #FFFF00;display:flex;align-items:center;gap:12px}
+    .h-icon{font-size:2rem}
+    #header h1{font-size:1.15rem;margin-bottom:3px}
+    #header .sub{font-size:0.75rem;color:#aac4e0;line-height:1.5}
+    #map{width:100%;height:calc(100vh - 120px)}
+    #legend{position:absolute;bottom:28px;right:10px;z-index:1000;background:rgba(22,33,62,.92);border:1px solid #444;border-radius:8px;padding:12px 16px;min-width:210px;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+    #legend h4{font-size:.82rem;margin-bottom:7px;color:#aac4e0;letter-spacing:1px}
+    .li{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:.8rem}
+    .lc{width:15px;height:15px;border-radius:3px;flex-shrink:0}
+    #footer{background:#16213e;border-top:1px solid #333;padding:5px 18px;font-size:.72rem;color:#889;display:flex;justify-content:space-between}
+    .pt{font-weight:bold;font-size:.95rem;margin-bottom:3px}
+    .ps{padding:2px 8px;border-radius:4px;font-size:.78rem;display:inline-block;margin-bottom:5px}
+    .pw{background:#FFFF00;color:#fff}
+    .pc{background:#4CAF50;color:#fff}
+    .pi{font-size:.75rem;color:#555;margin-top:4px}
+    .ta{font-size:.72rem;color:#888;margin-top:6px;border-top:1px solid #eee;padding-top:5px;max-height:80px;overflow-y:auto}
   </style>
 </head>
 <body>
 <div id="header">
-  <div class="icon">🌬️</div>
+  <div class="h-icon">🌬️</div>
   <div>
-    <h1>陸上強風特報 — 2026-02-18</h1>
-    <div class="subtitle">生效時間：10:28 ～ 2026-02-19 16:00（台北時間）｜影響縣市：14 個｜資料來源：CWA W-C0033-001</div>
+    <h1>陸上強風特報(黃色燈號)</h1>
+    <div class="sub">
+      生效：2026-02-18 10:28 ～ 2026-02-19 16:00（TPE）｜影響：13 縣市 （精確鄉鎮：52 個，縣市層級顯示）｜🔴 生效中<br/>
+      資料來源：CWA CAP | 發布：2026-02-18 10:29
+    </div>
   </div>
 </div>
-
 <div id="map"></div>
-
 <div id="legend">
   <h4>📊 圖例</h4>
-  <div class="legend-item"><div class="legend-color" style="background:#FF4444;opacity:0.8"></div> 陸上強風特報（14縣市）</div>
-  <div class="legend-item"><div class="legend-color" style="background:#4CAF50;opacity:0.6"></div> 無特報（8縣市）</div>
-  <hr style="border-color:#333;margin:8px 0">
-  <div style="font-size:0.75rem;color:#889">點擊縣市查看詳情</div>
+  <div class="li"><div class="lc" style="background:#FFFF00;opacity:.8"></div>陸上強風特報(黃色燈號)（13縣市）</div>
+  <div class="li"><div class="lc" style="background:#4CAF50;opacity:.55"></div>無特報</div>
+  <hr style="border-color:#333;margin:7px 0"/>
+  <div style="font-size:.72rem;color:#889">點擊縣市查看詳情</div>
 </div>
-
-<div id="info-bar">
-  <span>⚙️ 資料：CWA 氣象局 W-C0033-001 | 繪製：OpenClaw AI</span>
-  <span>📅 2026-02-18 10:28 TPE</span>
+<div id="footer">
+  <span>⚙️ 資料：CWA CAP | 繪製：OpenClaw AI</span>
+  <span>📅 2026-02-18 10:29 TPE</span>
 </div>
-
 <script>
-const windWarningCounties = new Set([
-  '基隆市','桃園縣','桃園市','新竹市','雲林縣','新北市','台南市','臺南市',
-  '澎湖縣','台中市','臺中市','苗栗縣','台東縣','臺東縣','屏東縣',
-  '新竹縣','彰化縣','嘉義縣'
-]);
+const WARNING_COUNTIES = new Set(["嘉義縣", "屏東縣", "彰化縣", "新北市", "新竹市", "新竹縣", "桃園市", "澎湖縣", "臺中市", "臺南市", "臺東縣", "苗栗縣", "雲林縣"]);
+const RAW_AREAS = ["新北市三芝區", "新北市淡水區", "桃園市觀音區", "桃園市新屋區", "桃園市蘆竹區", "新竹市北區", "新竹市香山區", "新竹縣新豐鄉", "新竹縣竹北市", "苗栗縣苑裡鎮", "苗栗縣通霄鎮", "苗栗縣後龍鎮", "苗栗縣西湖鄉", "臺中市清水區", "臺中市大甲區", "臺中市外埔區", "臺中市大安區", "臺中市龍井區", "臺中市梧棲區", "彰化縣福興鄉", "彰化縣線西鄉", "彰化縣鹿港鎮", "彰化縣伸港鄉", "彰化縣芳苑鄉", "彰化縣二林鎮", "彰化縣大城鄉", "雲林縣東勢鄉", "雲林縣臺西鄉", "雲林縣麥寮鄉", "雲林縣四湖鄉", "雲林縣水林鄉", "雲林縣口湖鄉", "嘉義縣東石鄉", "嘉義縣六腳鄉", "臺南市北門區", "臺南市七股區", "臺南市將軍區", "臺南市安南區", "屏東縣恆春鎮", "屏東縣滿州鄉", "屏東縣車城鄉", "屏東縣牡丹鄉", "臺東縣綠島鄉", "臺東縣蘭嶼鄉", "臺東縣卑南鄉", "臺東縣成功鎮", "澎湖縣望安鄉", "澎湖縣湖西鄉", "澎湖縣白沙鄉", "澎湖縣七美鄉"];
+const IS_TOWNSHIP = true;
+const MAP_COLOR = "#FFFF00";
+const HEADLINE = "陸上強風特報(黃色燈號)";
+const EFFECTIVE = "2026-02-18 10:28";
+const EXPIRES = "2026-02-19 16:00";
+const DESCRIPTION = "東北風偏強，18日上午至19日下午新北市、桃園市、新竹市、新竹縣、苗栗縣、臺中市、彰化縣、雲林縣、嘉義縣、臺南市、屏東縣、臺東縣(含蘭嶼、綠島)、澎湖縣局部地區有平均風6級以上或陣風8級以上發生的機率(黃色燈號)，請注意。";
+const WEB_URL = "https://www.cwa.gov.tw/V8/C/P/Warning/W25.html";
 
-const validStart = '2026-02-18 10:28';
-const validEnd = '2026-02-19 16:00';
+const NORMALIZE = {"台東縣":"臺東縣","台南市":"臺南市","台中市":"臺中市","台北市":"臺北市","桃園縣":"桃園市"};
+function norm(n){return NORMALIZE[n]||n;}
+function isWarn(n){return WARNING_COUNTIES.has(norm(n))||WARNING_COUNTIES.has(n);}
 
-function getCountyDisplayName(name) {
-  const map = {
-    '台東縣':'臺東縣','台南市':'臺南市','台中市':'臺中市',
-    '台北市':'臺北市','桃園縣':'桃園市'
-  };
-  return map[name] || name;
-}
-
-function isWarning(name) {
-  return windWarningCounties.has(name);
-}
-
-function style(feature) {
-  const name = feature.properties.COUNTYNAME || feature.properties.name || '';
-  const warning = isWarning(name);
-  return {
-    fillColor: warning ? '#FF4444' : '#4CAF50',
-    weight: 1.2,
-    opacity: 1,
-    color: 'white',
-    fillOpacity: warning ? 0.72 : 0.45
-  };
-}
-
-const map = L.map('map', {
-  center: [23.5, 121.0],
-  zoom: 7,
-  zoomControl: true
-});
-
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  attribution: '© OpenStreetMap contributors © CARTO',
-  subdomains: 'abcd',
-  maxZoom: 19
+const map = L.map('map',{center:[23.5,121.0],zoom:7});
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+  attribution:'© OpenStreetMap contributors © CARTO',subdomains:'abcd',maxZoom:19
 }).addTo(map);
 
-function onEachFeature(feature, layer) {
-  const rawName = feature.properties.COUNTYNAME || feature.properties.name || '';
-  const displayName = getCountyDisplayName(rawName);
-  const warning = isWarning(rawName);
-  
-  const popupContent = `
-    <div class="popup-title">${displayName}</div>
-    <div class="popup-status ${warning ? 'popup-warning' : 'popup-clear'}">
-      ${warning ? '⚠️ 陸上強風特報' : '✅ 無特報'}
-    </div>
-    ${warning ? `<div class="popup-time">⏰ ${validStart} ～ ${validEnd} (TPE)</div>` : ''}
-  `;
-  layer.bindPopup(popupContent, { maxWidth: 220 });
-  
+function style(f){
+  const w=isWarn(f.properties.COUNTYNAME||f.properties.name||'');
+  return {fillColor:w?MAP_COLOR:'#4CAF50',weight:1.2,opacity:1,color:'#fff',fillOpacity:w?.72:.45};
+}
+
+let gl;
+function onEach(f,layer){
+  const raw=f.properties.COUNTYNAME||f.properties.name||'';
+  const nm=norm(raw);
+  const w=isWarn(raw);
+  // 鄉鎮清單（若有）
+  const towns=IS_TOWNSHIP&&w?RAW_AREAS.filter(a=>a.startsWith(nm.replace('臺','台'))||a.startsWith(nm)):[];
+  const townHtml=towns.length>0?`<div class="ta"><b>警戒鄉鎮：</b><br/>`+towns.join('、')+'</div>':'';
+  const pop=`<div class="pt">${nm}</div>
+    <span class="ps ${w?'pw':'pc'}">${w?'⚠️ '+HEADLINE:'✅ 無特報'}</span>
+    ${w?`<div class="pi">⏰ ${EFFECTIVE} ～ ${EXPIRES}</div>`+townHtml:''}
+    ${WEB_URL&&w?`<div style="margin-top:6px"><a href="${WEB_URL}" target="_blank" style="color:#64b5f6;font-size:.75rem">📎 官方連結</a></div>`:''}`;
+  layer.bindPopup(pop,{maxWidth:260});
   layer.on({
-    mouseover: e => e.target.setStyle({ weight: 2.5, color: '#FFD700', fillOpacity: 0.9 }),
-    mouseout: e => geojsonLayer.resetStyle(e.target),
-    click: e => map.fitBounds(e.target.getBounds(), { padding: [30, 30] })
+    mouseover:e=>e.target.setStyle({weight:2.5,color:'#FFD700',fillOpacity:.9}),
+    mouseout:e=>gl.resetStyle(e.target),
+    click:e=>map.fitBounds(e.target.getBounds(),{padding:[30,30]})
   });
 }
 
-// Fetch GeoJSON from CDN
 fetch('https://raw.githubusercontent.com/g0v/twgeojson/master/json/twCounty2010.geo.json')
-  .then(r => r.json())
-  .then(data => {
-    window.geojsonLayer = L.geoJSON(data, {
-      style: style,
-      onEachFeature: onEachFeature
-    }).addTo(map);
+  .then(r=>r.json())
+  .then(data=>{
+    gl=L.geoJSON(data,{style:style,onEachFeature:onEach}).addTo(map);
   })
-  .catch(err => console.error('GeoJSON load failed:', err));
+  .catch(e=>console.error('GeoJSON error:',e));
 </script>
 </body>
 </html>
