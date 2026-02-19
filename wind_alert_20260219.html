@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌬️ 陸上強風特報 2026-02-19</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Noto Sans TC', sans-serif; background:#12172a; color:white; }
+    #header {
+      padding: 14px 20px;
+      background: linear-gradient(135deg, #1a1a3a 0%, #0d1117 100%);
+      border-bottom: 2px solid #e63946;
+    }
+    #header h1 { font-size: 1.3rem; color: white; }
+    #header p  { font-size: 0.82rem; color: #8899cc; margin-top:4px; }
+    #map { height: calc(100vh - 90px); width: 100%; }
+    .legend {
+      background: rgba(18,23,42,0.92);
+      border: 1px solid #3d72b4;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      line-height: 1.8;
+    }
+    .legend h4 { margin-bottom:6px; color:#ff8fa3; font-size:0.9rem; }
+    .dot { display:inline-block; width:12px; height:12px; border-radius:2px; margin-right:6px; vertical-align:middle; }
+    .alert-popup h3 { color:#e63946; margin-bottom:6px; }
+    .alert-popup p  { font-size:0.85rem; margin:2px 0; }
+  </style>
+</head>
+<body>
+<div id="header">
+  <h1>🌬️ 陸上強風特報 — 影響區域</h1>
+  <p>2026-02-19 &nbsp;|&nbsp; 有效時間：04:30 ~ 16:00 (TPE) &nbsp;|&nbsp; 資料來源：中央氣象署</p>
+</div>
+<div id="map"></div>
+
+<script>
+const map = L.map('map', { center: [23.6, 120.9], zoom: 7 });
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors',
+  maxZoom: 18
+}).addTo(map);
+
+// 警報縣市
+const ALERT = ['桃園市', '新竹縣', '屏東縣', '澎湖縣'];
+
+fetch('wind_alert_20260219.geojson')
+  .then(r => r.json())
+  .then(data => {
+    L.geoJSON(data, {
+      style: f => {
+        const isAlert = ALERT.includes(f.properties.COUNTY);
+        return {
+          fillColor:   isAlert ? '#e63946' : '#1e3a5f',
+          fillOpacity: isAlert ? 0.75 : 0.45,
+          color:       isAlert ? '#ff8fa3' : '#3d72b4',
+          weight:      isAlert ? 2.0 : 0.8
+        };
+      },
+      onEachFeature: (f, layer) => {
+        const isAlert = ALERT.includes(f.properties.COUNTY);
+        const html = isAlert
+          ? `<div class="alert-popup">
+               <h3>⚠️ ${f.properties.COUNTY}</h3>
+               <p><b>警報類型：</b>陸上強風特報</p>
+               <p><b>有效起：</b>04:30 TPE</p>
+               <p><b>有效迄：</b>16:00 TPE</p>
+             </div>`
+          : `<div class="alert-popup">
+               <h3 style="color:#8899cc">${f.properties.COUNTY}</h3>
+               <p>目前無警報</p>
+             </div>`;
+        layer.bindPopup(html, { maxWidth: 220 });
+        layer.bindTooltip(f.properties.COUNTY, {
+          permanent: false, direction: 'center',
+          className: 'county-tooltip'
+        });
+      }
+    }).addTo(map);
+  });
+
+// 圖例
+const legend = L.control({ position: 'bottomright' });
+legend.onAdd = () => {
+  const div = L.DomUtil.create('div', 'legend');
+  div.innerHTML = `
+    <h4>圖例</h4>
+    <span class="dot" style="background:#e63946"></span>陸上強風特報<br>
+    <span class="dot" style="background:#1e3a5f"></span>無警報<br>
+    <hr style="border-color:#3d72b4;margin:6px 0">
+    <small style="color:#8899cc">點擊縣市查看詳情</small>
+  `;
+  return div;
+};
+legend.addTo(map);
+</script>
+</body>
+</html>

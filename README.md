@@ -1,27 +1,31 @@
-# 災害警戒地圖 - 桃園市濃霧特報
+# 災害警戒地圖 (Taiwan Disaster Alert Maps)
 
-## 🌫️ 2026-02-16 濃霧特報
+即時警報互動地圖，資料來源：中央氣象署 / NCDR。
+
+---
+
+## 🌬️ 2026-02-19 陸上強風特報
+
+**影響縣市：** 桃園市、新竹縣、屏東縣、澎湖縣  
+**有效時間：** 04:30 ~ 16:00 (TPE)  
+**警報類型：** 陸上強風特報  
+
+### 🗺️ 互動式地圖
+👉 [點擊查看陸上強風特報地圖](https://wrsue.github.io/disaster-maps/wind_alert_20260219.html)
+
+### GeoJSON（GitHub 原生渲染）
+👉 [wind_alert_20260219.geojson](wind_alert_20260219.geojson)
+
+---
+
+## 🌫️ 2026-02-16 濃霧特報（歸檔）
 
 **影響範圍：** 桃園市全區  
 **發布時間：** 03:58、06:34  
 **能見度：** < 200公尺  
-**警戒等級：** 黃色
 
-## 🗺️ 互動式地圖
-
-[點擊查看地圖](https://wrsue.github.io/disaster-maps/)
-
-### 地圖特色
-- ✅ 真實桃園市行政區界（5,929 個精確座標點）
-- ✅ OpenStreetMap 底圖（可縮放、查看地名）
-- ✅ 互動式標記（點擊查看詳情）
-- ✅ 圖層控制
+👉 [2016-02-16 互動地圖](https://wrsue.github.io/disaster-maps/)
 
 ---
 
-**資料來源：**
-- CAP 警報：NCDR 災害示警公開資料平台
-- 行政區界：g0v/twgeojson
-- 底圖：OpenStreetMap
-
-**工具：** Folium, Python, OpenClaw
+*地圖由 Molt ⚙️ 自動生成 | Powered by Leaflet + OpenStreetMap*
