@@ -11,10 +11,12 @@
 **警報類型：** 陸上強風特報  
 
 ### 🗺️ 互動式地圖
-👉 [點擊查看陸上強風特報地圖](https://wrsue.github.io/disaster-maps/wind_alert_20260219.html)
+👉 [縣市級地圖](https://wrsue.github.io/disaster-maps/wind_alert_20260219.html)  
+👉 [**鄉鎮級地圖（368 鄉鎮精細邊界）**](https://wrsue.github.io/disaster-maps/wind_alert_town_20260219.html)
 
 ### GeoJSON（GitHub 原生渲染）
-👉 [wind_alert_20260219.geojson](wind_alert_20260219.geojson)
+👉 [wind_alert_20260219.geojson（縣市）](wind_alert_20260219.geojson)  
+👉 [wind_alert_town_20260219.geojson（鄉鎮）](wind_alert_town_20260219.geojson)
 
 ---
 

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌬️ 陸上強風特報 — 鄉鎮級 2026-02-19</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; background:#12172a; color:white; }
+    #header {
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #1a1a3a 0%, #0d1117 100%);
+      border-bottom: 2px solid #e63946;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    #header h1 { font-size: 1.25rem; color: white; }
+    #header p  { font-size: 0.80rem; color: #8899cc; margin-top:3px; }
+    #map { height: calc(100vh - 78px); width: 100%; }
+
+    .legend {
+      background: rgba(13,17,23,0.93);
+      border: 1px solid #3d72b4;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      line-height: 1.9;
+      min-width: 160px;
+      color: white;
+    }
+    .legend h4 { margin-bottom:5px; color:#ff8fa3; font-size:0.88rem; border-bottom:1px solid #3d72b4; padding-bottom:4px; }
+    .dot { display:inline-block; width:13px; height:13px; border-radius:3px; margin-right:6px; vertical-align:middle; }
+
+    .leaflet-popup-content-wrapper {
+      background: #12172a !important;
+      border: 1px solid #3d72b4 !important;
+      color: white !important;
+      border-radius: 8px !important;
+    }
+    .leaflet-popup-tip { background: #12172a !important; }
+    .popup-inner h3 { color:#ff8fa3; margin-bottom:6px; font-size:1rem; }
+    .popup-inner p  { font-size:0.83rem; margin:3px 0; color:#ccddff; }
+    .popup-inner .tag {
+      display:inline-block; background:#e63946; color:white;
+      font-size:0.75rem; padding:2px 7px; border-radius:4px;
+      margin-top:4px;
+    }
+
+    #stats {
+      position:absolute; top:88px; left:12px; z-index:1000;
+      background:rgba(13,17,23,0.88);
+      border:1px solid #3d72b4; border-radius:8px;
+      padding:8px 12px; font-size:0.78rem; color:#aaccff;
+      line-height:1.7;
+    }
+    #stats b { color:white; }
+  </style>
+</head>
+<body>
+
+<div id="header">
+  <div>
+    <h1>🌬️ 陸上強風特報 — 鄉鎮級影響區域</h1>
+    <p>2026-02-19 &nbsp;|&nbsp; 04:30 ~ 16:00 (TPE) &nbsp;|&nbsp; 資料：中央氣象署</p>
+  </div>
+</div>
+
+<div id="stats">
+  警報縣市：<b>4</b> 個<br>
+  涉及鄉鎮：<b id="townCount">計算中...</b> 個<br>
+  警報類型：<b style="color:#ff8fa3">陸上強風特報</b>
+</div>
+
+<div id="map"></div>
+
+<script>
+const ALERT_COUNTIES = ['桃園市', '新竹縣', '屏東縣', '澎湖縣'];
+
+// 不同縣市的警報色（同類但可區分）
+const COUNTY_COLORS = {
+  '桃園市': '#e63946',
+  '新竹縣': '#f4722b',
+  '屏東縣': '#d62828',
+  '澎湖縣': '#c1121f'
+};
+
+const map = L.map('map', { center: [23.6, 120.9], zoom: 8 });
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap contributors',
+  maxZoom: 18,
+  opacity: 0.6
+}).addTo(map);
+
+fetch('wind_alert_town_20260219.geojson')
+  .then(r => r.json())
+  .then(data => {
+    let alertTownCount = 0;
+
+    const layer = L.geoJSON(data, {
+      style: f => {
+        const isAlert = f.properties.alert;
+        const county = f.properties.COUNTY;
+        if (isAlert) alertTownCount++;
+        return {
+          fillColor:   isAlert ? (COUNTY_COLORS[county] || '#e63946') : '#1e3a5f',
+          fillOpacity: isAlert ? 0.70 : 0.30,
+          color:       isAlert ? '#ffb3ba' : '#3d72b4',
+          weight:      isAlert ? 1.2 : 0.4
+        };
+      },
+      onEachFeature: (f, layer) => {
+        const isAlert = f.properties.alert;
+        const county  = f.properties.COUNTY;
+        const town    = f.properties.TOWN;
+
+        layer.on('mouseover', function(e) {
+          if (!isAlert) {
+            this.setStyle({ fillOpacity: 0.5, weight: 0.8 });
+          } else {
+            this.setStyle({ fillOpacity: 0.88, weight: 2 });
+          }
+        });
+        layer.on('mouseout', function(e) {
+          geoLayer.resetStyle(this);
+        });
+
+        const html = isAlert
+          ? `<div class="popup-inner">
+               <h3>⚠️ ${county} ${town}</h3>
+               <p><b>警報類型：</b>陸上強風特報</p>
+               <p><b>有效時間：</b>04:30 ~ 16:00 TPE</p>
+               <p><b>發布機關：</b>中央氣象署</p>
+               <span class="tag">強風特報</span>
+             </div>`
+          : `<div class="popup-inner">
+               <h3 style="color:#8899cc">${county} ${town}</h3>
+               <p style="color:#667799">目前無警報</p>
+             </div>`;
+
+        layer.bindPopup(html, { maxWidth: 240 });
+        layer.bindTooltip(`${county} ${town}`, {
+          permanent: false, direction: 'auto', sticky: true,
+          className: 'county-tooltip'
+        });
+      }
+    }).addTo(map);
+
+    const geoLayer = layer;
+    document.getElementById('townCount').textContent = alertTownCount;
+  });
+
+// 圖例
+const legend = L.control({ position: 'bottomright' });
+legend.onAdd = () => {
+  const div = L.DomUtil.create('div', 'legend');
+  div.innerHTML = `
+    <h4>🗺️ 圖例</h4>
+    <span class="dot" style="background:#e63946"></span>桃園市（強風）<br>
+    <span class="dot" style="background:#f4722b"></span>新竹縣（強風）<br>
+    <span class="dot" style="background:#d62828"></span>屏東縣（強風）<br>
+    <span class="dot" style="background:#c1121f"></span>澎湖縣（強風）<br>
+    <span class="dot" style="background:#1e3a5f"></span>無警報地區<br>
+    <hr style="border-color:#3d72b4;margin:6px 0">
+    <small style="color:#8899cc">點擊鄉鎮查看詳情</small>
+  `;
+  return div;
+};
+legend.addTo(map);
+</script>
+</body>
+</html>
