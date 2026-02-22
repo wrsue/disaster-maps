@@ -1,0 +1,24 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "title": "機車墜橋事故",
+        "location": "高雄市桃源區瓦筏哈橋（明霸克露橋）",
+        "time": "2026-02-22 14:08",
+        "severity": "嚴重",
+        "casualties": "1 OHCA（男性，約60歲）",
+        "description": "機車騎士摔落瓦筏哈橋，現場已無心跳呼吸",
+        "road": "台20線南橫公路 94K",
+        "marker-color": "#d32f2f",
+        "marker-size": "large",
+        "marker-symbol": "hospital"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [120.788213, 23.188646]
+      }
+    }
+  ]
+}
