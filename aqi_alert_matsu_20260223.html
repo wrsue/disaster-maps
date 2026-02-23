@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>空氣品質紅色警示 (AQI > 150) - 連江縣（馬祖）</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+        #map { position: absolute; top: 60px; bottom: 0; width: 100%; }
+        #header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #d32f2f;
+            color: white;
+            padding: 12px 20px;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        #header h1 { margin: 0; font-size: 18px; font-weight: 600; }
+        #header p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.9; }
+        .popup-content { font-size: 14px; line-height: 1.6; }
+        .popup-content h3 { margin: 0 0 10px 0; color: #d32f2f; }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <h1>⚠️ 空氣品質紅色警示 (AQI > 150) - 連江縣（馬祖）</h1>
+        <p>📍 連江縣（馬祖） ｜ 2026-02-23 11:14</p>
+    </div>
+    <div id="map"></div>
+
+    <script>
+        const map = L.map('map').setView([25.976, 119.95], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 18
+        }).addTo(map);
+
+        const icon = L.divIcon({
+            className: 'custom-icon',
+            html: '<div style="background:#d32f2f;color:white;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3);">⚠️</div>',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20]
+        });
+
+        const marker = L.marker([25.976, 119.95], { icon: icon }).addTo(map);
+
+        const popupContent = `
+            <div class="popup-content">
+                <h3>⚠️ 空氣品質紅色警示 (AQI > 150)</h3>
+                <p><strong>時間：</strong>2026-02-23 11:14</p>
+                <p><strong>地點：</strong>連江縣（馬祖）</p>
+                <p><strong>座標：</strong>25.976°N, 119.95°E</p>
+                <p><strong>狀況：</strong>空氣品質紅色警示 (AQI > 150)</p>
+                <p><strong>傷亡：</strong>對所有族群不健康，宜減少在戶外活動</p>
+                <p style="margin-top:10px;padding-top:10px;border-top:1px solid #ddd;font-size:12px;color:#666;">
+                    製圖時間：2026-02-23 11:14 TPE
+                </p>
+            </div>
+        `;
+
+        marker.bindPopup(popupContent, { maxWidth: 300 }).openPopup();
+
+        L.circle([25.976, 119.95], {
+            color: '#d32f2f',
+            fillColor: '#d32f2f',
+            fillOpacity: 0.2,
+            radius: 100
+        }).addTo(map);
+    </script>
+</body>
+</html>
