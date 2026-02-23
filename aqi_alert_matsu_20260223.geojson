@@ -1,0 +1,26 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "location": "連江縣（馬祖）",
+        "incident": "空氣品質紅色警示 (AQI > 150)",
+        "title": "空氣品質紅色警示 (AQI > 150) - 連江縣（馬祖）",
+        "time": "2026-02-23 11:14",
+        "description": "空氣品質紅色警示 (AQI > 150)",
+        "severity": "high",
+        "zoom": 15,
+        "radius": 100,
+        "casualties": "對所有族群不健康，宜減少在戶外活動"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          119.95,
+          25.976
+        ]
+      }
+    }
+  ]
+}
