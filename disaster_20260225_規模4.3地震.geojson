@@ -1,0 +1,25 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "location": "台南市南化區",
+        "incident": "規模4.3地震",
+        "title": "規模4.3地震 - 台南市南化區",
+        "time": "2026-02-25 01:23",
+        "description": "震源深度9.4公里。最大震度：南投3級、高雄3級。其他震度：雲林2級、嘉義2級、嘉義市2級、彰化2級、屏東1級",
+        "severity": "medium",
+        "zoom": 15,
+        "radius": 100
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.51,
+          23.09
+        ]
+      }
+    }
+  ]
+}
