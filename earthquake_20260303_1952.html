@@ -79,6 +79,11 @@
         
         // 震度資料
         const intensityData = {
+  "台南市": {
+    "intensity": 4,
+    "color": "#ffff00",
+    "label": "震度 4 級"
+  },
   "臺南市": {
     "intensity": 4,
     "color": "#ffff00",
@@ -119,10 +124,20 @@
     "color": "#0000ff",
     "label": "震度 2 級"
   },
+  "台中市": {
+    "intensity": 2,
+    "color": "#0000ff",
+    "label": "震度 2 級"
+  },
   "臺中市": {
     "intensity": 2,
     "color": "#0000ff",
     "label": "震度 2 級"
+  },
+  "台東縣": {
+    "intensity": 1,
+    "color": "#87ceeb",
+    "label": "震度 1 級"
   },
   "臺東縣": {
     "intensity": 1,
@@ -150,10 +165,16 @@
         fetch('county_boundaries.geojson')
             .then(response => response.json())
             .then(data => {
+                // 正規化縣市名稱（處理「台」與「臺」）
+                function normalizeCountyName(name) {
+                    return name.replace(/臺/g, '台');
+                }
+                
                 // 樣式函數
                 function style(feature) {
                     const countyName = feature.properties.COUNTYNAME;
-                    const info = intensityData[countyName];
+                    const normalizedName = normalizeCountyName(countyName);
+                    const info = intensityData[normalizedName] || intensityData[countyName];
                     
                     return {
                         fillColor: info ? info.color : '#cccccc',
@@ -178,7 +199,8 @@
                     
                     // 更新資訊框
                     const countyName = layer.feature.properties.COUNTYNAME;
-                    const info = intensityData[countyName];
+                    const normalizedName = normalizeCountyName(countyName);
+                    const info = intensityData[normalizedName] || intensityData[countyName];
                     
                     if (info) {
                         infoControl._div.innerHTML = `
