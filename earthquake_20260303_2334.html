@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CWA-EQ115018-2026-0303-233429 - 地震震度分布圖</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+        .info {
+            padding: 10px 15px;
+            font-size: 14px;
+            background: white;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            max-width: 300px;
+        }
+        .info h4 {
+            margin: 0 0 10px;
+            color: #333;
+            font-size: 16px;
+        }
+        .info p {
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+        .legend {
+            line-height: 22px;
+            color: #555;
+            background: white;
+            background: rgba(255,255,255,0.95);
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+        }
+        .legend h4 {
+            margin: 0 0 8px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // 初始化地圖（中心點：台灣中部）
+        const map = L.map('map').setView([23.7, 120.8], 7);
+        
+        // 底圖圖層
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 18
+        }).addTo(map);
+        
+        // 震度資料
+        const intensityData = {
+  "台南市": {
+    "intensity": 4,
+    "color": "#ffff00",
+    "label": "震度 4 級"
+  },
+  "臺南市": {
+    "intensity": 4,
+    "color": "#ffff00",
+    "label": "震度 4 級"
+  },
+  "嘉義縣": {
+    "intensity": 2,
+    "color": "#0000ff",
+    "label": "震度 2 級"
+  },
+  "高雄市": {
+    "intensity": 2,
+    "color": "#0000ff",
+    "label": "震度 2 級"
+  },
+  "嘉義市": {
+    "intensity": 1,
+    "color": "#87ceeb",
+    "label": "震度 1 級"
+  },
+  "雲林縣": {
+    "intensity": 1,
+    "color": "#87ceeb",
+    "label": "震度 1 級"
+  },
+  "屏東縣": {
+    "intensity": 1,
+    "color": "#87ceeb",
+    "label": "震度 1 級"
+  },
+  "台東縣": {
+    "intensity": 1,
+    "color": "#87ceeb",
+    "label": "震度 1 級"
+  },
+  "臺東縣": {
+    "intensity": 1,
+    "color": "#87ceeb",
+    "label": "震度 1 級"
+  },
+  "南投縣": {
+    "intensity": 1,
+    "color": "#87ceeb",
+    "label": "震度 1 級"
+  },
+  "彰化縣": {
+    "intensity": 1,
+    "color": "#87ceeb",
+    "label": "震度 1 級"
+  },
+  "花蓮縣": {
+    "intensity": 1,
+    "color": "#87ceeb",
+    "label": "震度 1 級"
+  }
+};
+        
+        // 載入縣市邊界 GeoJSON
+        fetch('county_boundaries.geojson')
+            .then(response => response.json())
+            .then(data => {
+                // 正規化縣市名稱（處理「台」與「臺」）
+                function normalizeCountyName(name) {
+                    return name.replace(/臺/g, '台');
+                }
+                
+                // 樣式函數
+                function style(feature) {
+                    const countyName = feature.properties.COUNTYNAME;
+                    const normalizedName = normalizeCountyName(countyName);
+                    const info = intensityData[normalizedName] || intensityData[countyName];
+                    
+                    return {
+                        fillColor: info ? info.color : '#cccccc',
+                        weight: 2,
+                        opacity: 1,
+                        color: 'white',
+                        dashArray: '3',
+                        fillOpacity: 0.6
+                    };
+                }
+                
+                // 高亮樣式
+                function highlightFeature(e) {
+                    const layer = e.target;
+                    layer.setStyle({
+                        weight: 3,
+                        color: '#666',
+                        dashArray: '',
+                        fillOpacity: 0.8
+                    });
+                    layer.bringToFront();
+                    
+                    // 更新資訊框
+                    const countyName = layer.feature.properties.COUNTYNAME;
+                    const normalizedName = normalizeCountyName(countyName);
+                    const info = intensityData[normalizedName] || intensityData[countyName];
+                    
+                    if (info) {
+                        infoControl._div.innerHTML = `
+                            <h4>地震震度分布</h4>
+                            <p><strong>${countyName}</strong></p>
+                            <p>${info.label}</p>
+                        `;
+                    } else {
+                        infoControl._div.innerHTML = `
+                            <h4>地震震度分布</h4>
+                            <p><strong>${countyName}</strong></p>
+                            <p>無震度資料</p>
+                        `;
+                    }
+                }
+                
+                function resetHighlight(e) {
+                    geojsonLayer.resetStyle(e.target);
+                    infoControl._div.innerHTML = '<h4>地震震度分布</h4><p>將滑鼠移至縣市查看震度</p>';
+                }
+                
+                function onEachFeature(feature, layer) {
+                    layer.on({
+                        mouseover: highlightFeature,
+                        mouseout: resetHighlight
+                    });
+                }
+                
+                // 加入 GeoJSON 圖層
+                const geojsonLayer = L.geoJSON(data, {
+                    style: style,
+                    onEachFeature: onEachFeature
+                }).addTo(map);
+                
+                // 加入資訊框
+                const infoControl = L.control({ position: 'topright' });
+                infoControl.onAdd = function(map) {
+                    this._div = L.DomUtil.create('div', 'info');
+                    this._div.innerHTML = '<h4>地震震度分布</h4><p>將滑鼠移至縣市查看震度</p>';
+                    return this._div;
+                };
+                infoControl.addTo(map);
+                
+                // 加入圖例
+                const legend = L.control({ position: 'bottomright' });
+                legend.onAdd = function(map) {
+                    const div = L.DomUtil.create('div', 'legend');
+                    div.innerHTML = `
+                        <h4>震度等級</h4>
+                        <i style="background:#800080"></i> 震度 7 級<br>
+                        <i style="background:#ff0000"></i> 震度 6 級<br>
+                        <i style="background:#ff6600"></i> 震度 5 級<br>
+                        <i style="background:#ffff00"></i> 震度 4 級<br>
+                        <i style="background:#00ff00"></i> 震度 3 級<br>
+                        <i style="background:#0000ff"></i> 震度 2 級<br>
+                        <i style="background:#87ceeb"></i> 震度 1 級<br>
+                        <i style="background:#cccccc"></i> 無資料
+                    `;
+                    return div;
+                };
+                legend.addTo(map);
+                
+                // 加入標題資訊
+                const titleControl = L.control({ position: 'topleft' });
+                titleControl.onAdd = function(map) {
+                    const div = L.DomUtil.create('div', 'info');
+                    div.innerHTML = `
+                        <h4>🌍 芮氏規模4.5</h4>
+                        <p><strong>震央</strong>：臺南市楠西區</p>
+                        <p><strong>深度</strong>：8.5公里</p>
+                        <p><strong>時間</strong>：2026-03-03T23:34:29+08:00</p>
+                    `;
+                    return div;
+                };
+                titleControl.addTo(map);
+            })
+            .catch(error => {
+                console.error('載入 GeoJSON 失敗:', error);
+                alert('載入縣市邊界資料失敗，請檢查 county_boundaries.geojson 是否存在');
+            });
+    </script>
+</body>
+</html>
