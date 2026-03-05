@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>降雨特報 | 災害警戒地圖</title>
+  <title>強風特報 | 災害警戒地圖</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
@@ -29,37 +29,37 @@
 </head>
 <body>
 <div id="header">
-  <div class="h-icon">⚠️</div>
+  <div class="h-icon">🌬️</div>
   <div>
-    <h1>降雨特報</h1>
+    <h1>強風特報</h1>
     <div class="sub">
-      生效：2026-03-06 03:20 ～ 2026-03-06 11:00（TPE）｜影響：3 縣市 （精確鄉鎮：39 個）｜🔴 生效中<br/>
-      資料來源：CWA CAP | 發布：2026-03-06 03:32
+      生效：2026-03-06 04:30 ～ 2026-03-07 23:00（TPE）｜影響：14 縣市 （精確鄉鎮：95 個）｜🔴 生效中<br/>
+      資料來源：CWA CAP | 發布：2026-03-06 04:34
     </div>
   </div>
 </div>
 <div id="map"></div>
 <div id="legend">
   <h4>📊 圖例</h4>
-  <div class="li"><div class="lc" style="background:#FF4444;opacity:.8"></div>降雨特報（3縣市）</div>
+  <div class="li"><div class="lc" style="background:#FFFF00;opacity:.8"></div>強風特報（14縣市）</div>
   <div class="li"><div class="lc" style="background:#4CAF50;opacity:.55"></div>無特報</div>
   <hr style="border-color:#333;margin:7px 0"/>
   <div style="font-size:.72rem;color:#889">點擊區域查看詳情</div>
 </div>
 <div id="footer">
   <span>⚙️ 資料：CWA CAP | 繪製：OpenClaw AI</span>
-  <span>📅 2026-03-06 03:32 TPE</span>
+  <span>📅 2026-03-06 04:34 TPE</span>
 </div>
 <script>
-const WARNING_AREAS = new Set(["臺東縣池上鄉", "臺東縣太麻里鄉", "花蓮縣秀林鄉", "臺東縣海端鄉", "臺東縣延平鄉", "臺東縣東河鄉", "花蓮縣富里鄉", "臺東縣臺東市", "臺東縣關山鎮", "臺東縣成功鎮", "花蓮縣新城鄉", "花蓮縣吉安鄉", "花蓮縣壽豐鄉", "花蓮縣光復鄉", "宜蘭縣冬山鄉", "花蓮縣萬榮鄉", "花蓮縣鳳林鎮", "花蓮縣玉里鎮", "宜蘭縣頭城鎮", "宜蘭縣礁溪鄉", "宜蘭縣壯圍鄉", "宜蘭縣員山鄉", "花蓮縣豐濱鄉", "宜蘭縣南澳鄉", "宜蘭縣大同鄉", "宜蘭縣蘇澳鎮", "花蓮縣瑞穗鄉", "臺東縣達仁鄉", "臺東縣長濱鄉", "臺東縣金峰鄉", "宜蘭縣宜蘭市", "宜蘭縣五結鄉", "臺東縣鹿野鄉", "宜蘭縣羅東鎮", "臺東縣卑南鄉", "花蓮縣卓溪鄉", "宜蘭縣三星鄉", "臺東縣大武鄉", "花蓮縣花蓮市"]);
+const WARNING_AREAS = new Set(["新北市瑞芳區", "新北市貢寮區", "新北市三芝區", "新北市石門區", "新北市淡水區", "桃園市觀音區", "桃園市楊梅區", "桃園市新屋區", "桃園市龍潭區", "桃園市蘆竹區", "桃園市大園區", "新竹市東區", "新竹市北區", "新竹市香山區", "新竹縣芎林鄉", "新竹縣湖口鄉", "新竹縣新豐鄉", "新竹縣新埔鎮", "新竹縣竹北市", "新竹縣寶山鄉", "苗栗縣苑裡鎮", "苗栗縣通霄鎮", "苗栗縣後龍鎮", "苗栗縣竹南鎮", "苗栗縣苗栗市", "苗栗縣造橋鄉", "苗栗縣西湖鄉", "臺中市西屯區", "臺中市清水區", "臺中市大甲區", "臺中市外埔區", "臺中市大安區", "臺中市大肚區", "臺中市沙鹿區", "臺中市龍井區", "臺中市梧棲區", "臺中市后里區", "臺中市神岡區", "臺中市大雅區", "彰化縣福興鄉", "彰化縣線西鄉", "彰化縣秀水鄉", "彰化縣鹿港鎮", "彰化縣伸港鄉", "彰化縣溪湖鎮", "彰化縣埔鹽鄉", "彰化縣芳苑鄉", "彰化縣竹塘鄉", "彰化縣二林鎮", "彰化縣大城鄉", "彰化縣埤頭鄉", "彰化縣彰化市", "彰化縣和美鎮", "雲林縣二崙鄉", "雲林縣褒忠鄉", "雲林縣東勢鄉", "雲林縣臺西鄉", "雲林縣崙背鄉", "雲林縣麥寮鄉", "雲林縣四湖鄉", "雲林縣水林鄉", "雲林縣口湖鄉", "雲林縣北港鎮", "雲林縣元長鄉", "嘉義縣朴子市", "嘉義縣東石鄉", "嘉義縣六腳鄉", "嘉義縣布袋鎮", "嘉義縣義竹鄉", "臺南市學甲區", "臺南市北門區", "臺南市七股區", "臺南市將軍區", "臺南市佳里區", "臺南市鹽水區", "臺南市安南區", "屏東縣恆春鎮", "屏東縣滿州鄉", "屏東縣車城鄉", "屏東縣牡丹鄉", "臺東縣綠島鄉", "臺東縣蘭嶼鄉", "臺東縣卑南鄉", "臺東縣成功鎮", "臺東縣長濱鄉", "澎湖縣望安鄉", "澎湖縣湖西鄉", "澎湖縣白沙鄉", "澎湖縣七美鄉", "澎湖縣西嶼鄉", "澎湖縣馬公市", "連江縣東引鄉", "連江縣北竿鄉", "連江縣莒光鄉", "連江縣南竿鄉"]);
 const CIRCLE_AREAS = [];
 const CIRCLE_COLOR = "#FF4444";
-const WARNING_COUNTIES = new Set(["宜蘭縣", "臺東縣", "花蓮縣"]);
+const WARNING_COUNTIES = new Set(["嘉義縣", "屏東縣", "彰化縣", "新北市", "新竹市", "新竹縣", "桃園市", "澎湖縣", "臺中市", "臺南市", "臺東縣", "苗栗縣", "連江縣", "雲林縣"]);
 const IS_TOWNSHIP = true;
-const MAP_COLOR = "#FF4444";
-const HEADLINE = "降雨特報";
-const EFFECTIVE = "2026-03-06 03:20";
-const EXPIRES = "2026-03-06 11:00";
+const MAP_COLOR = "#FFFF00";
+const HEADLINE = "強風特報";
+const EFFECTIVE = "2026-03-06 04:30";
+const EXPIRES = "2026-03-07 23:00";
 const WEB_URL = "https://www.cwa.gov.tw/V8/C/P/Warning/W25.html";
 const TOWNSHIP_URL = "https://wrsue.github.io/disaster-maps/townships.geojson";
 const COUNTY_URL = "https://raw.githubusercontent.com/g0v/twgeojson/master/json/twCounty2010.geo.json";
