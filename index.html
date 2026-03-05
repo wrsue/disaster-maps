@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>海洋污染特報 | 災害警戒地圖</title>
+  <title>降雨特報 | 災害警戒地圖</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
@@ -31,35 +31,35 @@
 <div id="header">
   <div class="h-icon">⚠️</div>
   <div>
-    <h1>海洋污染特報</h1>
+    <h1>降雨特報</h1>
     <div class="sub">
-      生效：2026-03-05 15:00 ～ 2026-06-05 15:00（TPE）｜影響：圓形警戒區 1 處｜🔴 生效中<br/>
-      資料來源：CWA CAP | 發布：2026-03-06 00:00
+      生效：2026-03-06 00:50 ～ 2026-03-06 08:00（TPE）｜影響：2 縣市 （精確鄉鎮：15 個）｜🔴 生效中<br/>
+      資料來源：CWA CAP | 發布：2026-03-06 00:59
     </div>
   </div>
 </div>
 <div id="map"></div>
 <div id="legend">
   <h4>📊 圖例</h4>
-  <div class="li"><div class="lc" style="background:#FF4444;opacity:.8"></div>海洋污染特報 1 處圓形警戒區</div>
+  <div class="li"><div class="lc" style="background:#FF4444;opacity:.8"></div>降雨特報（2縣市）</div>
   <div class="li"><div class="lc" style="background:#4CAF50;opacity:.55"></div>無特報</div>
   <hr style="border-color:#333;margin:7px 0"/>
   <div style="font-size:.72rem;color:#889">點擊區域查看詳情</div>
 </div>
 <div id="footer">
   <span>⚙️ 資料：CWA CAP | 繪製：OpenClaw AI</span>
-  <span>📅 2026-03-06 00:00 TPE</span>
+  <span>📅 2026-03-06 00:59 TPE</span>
 </div>
 <script>
-const WARNING_AREAS = new Set(["澎湖縣七美鄉", "澎湖縣望安鄉", "澎湖縣湖西鄉", "澎湖縣白沙鄉", "澎湖縣西嶼鄉", "澎湖縣馬公市"]);
-const CIRCLE_AREAS = [{"lat": 23.5630555555556, "lng": 119.479166666667, "radius_km": 0.5}];
+const WARNING_AREAS = new Set(["花蓮縣秀林鄉", "花蓮縣玉里鎮", "宜蘭縣南澳鄉", "花蓮縣新城鄉", "花蓮縣吉安鄉", "花蓮縣壽豐鄉", "花蓮縣光復鄉", "花蓮縣卓溪鄉", "花蓮縣鳳林鎮", "花蓮縣富里鄉", "花蓮縣豐濱鄉", "宜蘭縣大同鄉", "花蓮縣萬榮鄉", "花蓮縣瑞穗鄉", "花蓮縣花蓮市"]);
+const CIRCLE_AREAS = [];
 const CIRCLE_COLOR = "#FF4444";
-const WARNING_COUNTIES = new Set(["澎湖縣"]);
+const WARNING_COUNTIES = new Set(["宜蘭縣", "花蓮縣"]);
 const IS_TOWNSHIP = true;
 const MAP_COLOR = "#FF4444";
-const HEADLINE = "海洋污染特報";
-const EFFECTIVE = "2026-03-05 15:00";
-const EXPIRES = "2026-06-05 15:00";
+const HEADLINE = "降雨特報";
+const EFFECTIVE = "2026-03-06 00:50";
+const EXPIRES = "2026-03-06 08:00";
 const WEB_URL = "https://www.cwa.gov.tw/V8/C/P/Warning/W25.html";
 const TOWNSHIP_URL = "https://wrsue.github.io/disaster-maps/townships.geojson";
 const COUNTY_URL = "https://raw.githubusercontent.com/g0v/twgeojson/master/json/twCounty2010.geo.json";
