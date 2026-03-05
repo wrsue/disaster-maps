@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>陸上強風特報(黃色燈號) | 災害警戒地圖</title>
+  <title>道路封閉特報 | 災害警戒地圖</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
@@ -29,34 +29,34 @@
 </head>
 <body>
 <div id="header">
-  <div class="h-icon">🌬️</div>
+  <div class="h-icon">🚧</div>
   <div>
-    <h1>陸上強風特報(黃色燈號)</h1>
+    <h1>道路封閉特報</h1>
     <div class="sub">
-      生效：2026-02-19 04:30 ～ 2026-02-19 16:00（TPE）｜影響：0 縣市（警報全數解除）））｜🔴 生效中<br/>
-      資料來源：CWA CAP | 發布：2026-02-18 22:35
+      生效：2026-03-05 09:00 ～ 2026-03-05 15:00（TPE）｜影響：圓形警戒區 1 處｜🔴 生效中<br/>
+      資料來源：CWA CAP | 發布：2026-03-05 10:23
     </div>
   </div>
 </div>
 <div id="map"></div>
 <div id="legend">
   <h4>📊 圖例</h4>
-  <div class="li"><div class="lc" style="background:#FFFF00;opacity:.8"></div>陸上強風特報(黃色燈號)（10縣市）</div>
+  <div class="li"><div class="lc" style="background:#FF4444;opacity:.8"></div>道路封閉特報 1 處圓形警戒區</div>
   <div class="li"><div class="lc" style="background:#4CAF50;opacity:.55"></div>無特報</div>
   <hr style="border-color:#333;margin:7px 0"/>
-  <div style="font-size:.72rem;color:#889">點擊縣市查看詳情</div>
+  <div style="font-size:.72rem;color:#889">點擊區域查看詳情</div>
 </div>
 <div id="footer">
   <span>⚙️ 資料：CWA CAP | 繪製：OpenClaw AI</span>
-  <span>📅 2026-02-18 22:35 TPE</span>
+  <span>📅 2026-03-05 10:23 TPE</span>
 </div>
 <script>
-const WARNING_AREAS = new Set(["南投縣仁愛鄉"]);
+const WARNING_AREAS = new Set([]);
 const CIRCLE_AREAS = [{"lat": 24.2404856, "lng": 121.2549607, "radius_km": 10.0}];
 const CIRCLE_COLOR = "#FF4444";
 const WARNING_COUNTIES = new Set(["南投縣"]);
 const IS_TOWNSHIP = true;
-const MAP_COLOR = "#FFFF00";
+const MAP_COLOR = "#FF4444";
 const HEADLINE = "道路封閉特報";
 const EFFECTIVE = "2026-03-05 09:00";
 const EXPIRES = "2026-03-05 15:00";
@@ -162,6 +162,21 @@ if (typeof CIRCLE_AREAS !== 'undefined' && CIRCLE_AREAS.length > 0) {
     map.setView([c.lat, c.lng], 12);
   }
 }
+
+// 圖層控制（使用者可切換鄉鎮邊界顯示）
+const baseLayers = {};
+const overlays = {};
+
+// 延遲設定 LayerControl（等 GeoJSON 載入完成）
+setTimeout(() => {
+  if (typeof gl !== 'undefined') {
+    overlays["📍 鄉鎮/縣市邊界"] = gl;
+  }
+  if (Object.keys(overlays).length > 0) {
+    L.control.layers(null, overlays, {collapsed: false, position: 'topleft'}).addTo(map);
+  }
+}, 2000);
+
 
 </script>
 </body>
