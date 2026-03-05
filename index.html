@@ -51,7 +51,9 @@
   <span>📅 2026-02-18 22:35 TPE</span>
 </div>
 <script>
-const WARNING_AREAS = new Set(["南投縣仁愛鄉"]);
+const WARNING_AREAS = new Set([]);
+const CIRCLE_AREAS = [{"lat": 24.2404856, "lng": 121.2549607, "radius_km": 10.0}];
+const CIRCLE_COLOR = "#FF4444";
 const WARNING_COUNTIES = new Set(["南投縣"]);
 const IS_TOWNSHIP = true;
 const MAP_COLOR = "#FFFF00";
@@ -129,6 +131,38 @@ if (IS_TOWNSHIP) {
     }).addTo(map);
   }).catch(e=>console.error('County GeoJSON error:',e));
 }
+
+// 繪製圓形警戒區
+if (typeof CIRCLE_AREAS !== 'undefined' && CIRCLE_AREAS.length > 0) {
+  const circleColor = typeof CIRCLE_COLOR !== 'undefined' ? CIRCLE_COLOR : '#FF4444';
+  CIRCLE_AREAS.forEach(c => {
+    const circle = L.circle([c.lat, c.lng], {
+      radius: c.radius_km * 1000,  // km → m
+      color: circleColor,
+      weight: 3,
+      opacity: 0.9,
+      fillColor: circleColor,
+      fillOpacity: 0.25,
+      dashArray: '8, 4'  // 虛線邊界
+    }).addTo(map);
+    
+    // 加入 popup
+    circle.bindPopup(`<div class="pt">⚠️ ${HEADLINE}</div>
+      <div class="pi">📍 座標：${c.lat.toFixed(4)}, ${c.lng.toFixed(4)}</div>
+      <div class="pi">📏 半徑：${c.radius_km} km</div>
+      <div class="pi">⏰ ${EFFECTIVE} ～ ${EXPIRES}</div>`, {maxWidth: 260});
+    
+    // 點擊時 zoom to circle
+    circle.on('click', () => map.fitBounds(circle.getBounds(), {padding: [50, 50]}));
+  });
+  
+  // 自動 zoom 到圓形區域
+  if (CIRCLE_AREAS.length === 1) {
+    const c = CIRCLE_AREAS[0];
+    map.setView([c.lat, c.lng], 12);
+  }
+}
+
 </script>
 </body>
 </html>
