@@ -1,0 +1,25 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "location": "台中西屯地震",
+        "incident": "規模4.5地震",
+        "title": "規模4.5地震 - 台中西屯地震",
+        "time": "2026-03-06 23:14",
+        "description": "地震通報_03/06-23:14規模4.5台中西屯深27km_彰 4 級、中 3 級、雲 2 級、投 2 級、苗 2 級、嘉 2 級、嘉市 2 級、南 2 級、竹 1 級、澎 1 級、花 1 級、宜 1 級。[資料來源：中央氣象署] (發布單位：國家災害防救科技中心)",
+        "severity": "medium",
+        "zoom": 15,
+        "radius": 100
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          120.64,
+          24.16
+        ]
+      }
+    }
+  ]
+}
