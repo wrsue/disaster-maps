@@ -253,6 +253,47 @@
                 };
                 legend.addTo(map);
                 
+                // 加入震央標記
+                const epicenterLat = 24.158;
+                const epicenterLon = 120.641;
+                
+                if (epicenterLat && epicenterLon) {
+                    // 震央圖標
+                    const epicenterIcon = L.divIcon({
+                        className: 'epicenter-marker',
+                        html: '<div style="background:#ff0000;width:20px;height:20px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 10px rgba(255,0,0,0.8);"></div>',
+                        iconSize: [20, 20],
+                        iconAnchor: [10, 10]
+                    });
+                    
+                    const epicenterMarker = L.marker([epicenterLat, epicenterLon], { icon: epicenterIcon })
+                        .bindPopup(`
+                            <div style="text-align:center;">
+                                <strong>⭐ 震央位置</strong><br>
+                                臺中市西屯區<br>
+                                座標：${epicenterLat.toFixed(3)}, ${epicenterLon.toFixed(3)}
+                            </div>
+                        `)
+                        .addTo(map);
+                    
+                    // 震央同心圓（10km, 30km, 50km）
+                    const circles = [
+                        { radius: 10000, color: '#ff0000', opacity: 0.3, label: '10km' },
+                        { radius: 30000, color: '#ff6600', opacity: 0.2, label: '30km' },
+                        { radius: 50000, color: '#ffcc00', opacity: 0.1, label: '50km' }
+                    ];
+                    
+                    circles.forEach(c => {
+                        L.circle([epicenterLat, epicenterLon], {
+                            radius: c.radius,
+                            color: c.color,
+                            fillColor: c.color,
+                            fillOpacity: c.opacity,
+                            weight: 1
+                        }).addTo(map);
+                    });
+                }
+                
                 // 加入標題資訊
                 const titleControl = L.control({ position: 'topleft' });
                 titleControl.onAdd = function(map) {
@@ -262,6 +303,7 @@
                         <p><strong>震央</strong>：臺中市西屯區</p>
                         <p><strong>深度</strong>：27.0公里</p>
                         <p><strong>時間</strong>：2026-03-06T23:14:25+08:00</p>
+                        ${epicenterLat && epicenterLon ? `<p><strong>座標</strong>：${epicenterLat.toFixed(3)}, ${epicenterLon.toFixed(3)}</p>` : ''}
                     `;
                     return div;
                 };
