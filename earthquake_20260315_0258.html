@@ -135,9 +135,14 @@
         fetch('county_boundaries.geojson')
             .then(response => response.json())
             .then(data => {
-                // 正規化縣市名稱（處理「台」與「臺」）
+                // 正規化縣市名稱（處理「台」與「臺」+ 縣市升格）
                 function normalizeCountyName(name) {
-                    return name.replace(/臺/g, '台');
+                    // 2014年桃園升格
+                    const upgradeMap = {
+                        '桃園縣': '桃園市'
+                    };
+                    let normalized = name.replace(/臺/g, '台');
+                    return upgradeMap[normalized] || normalized;
                 }
                 
                 // 樣式函數
