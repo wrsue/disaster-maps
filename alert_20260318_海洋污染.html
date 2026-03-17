@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>鐵路事故特報 | 災害警戒地圖</title>
+<title>海洋污染特報 | 災害警戒地圖</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -30,10 +30,10 @@ h1{font-size:1.5rem;font-weight:700;letter-spacing:1px}
 <body>
 <div id="header">
   <div class="h-icon">⚠️</div>
-  <h1>鐵路事故特報</h1>
+  <h1>海洋污染特報</h1>
   <div class="sub">
-    生效：2026-03-15 16:59 ～ 2026-03-15 18:30（TPE）｜影響：圓形警戒區 1 處｜🔴 發布中<br/>
-    資料來源：<a href="https://alerts.ncdr.nat.gov.tw" target="_blank" style="color:#4dabf7">NCDR</a> | 更新：2026-03-15 18:21
+    生效：2026-03-17 11:30 ～ 2026-06-17 11:30（TPE）｜影響：圓形警戒區 1 處｜🔴 發布中<br/>
+    資料來源：<a href="https://alerts.ncdr.nat.gov.tw" target="_blank" style="color:#4dabf7">NCDR</a> | 更新：2026-03-18 00:00
   </div>
 </div>
 <div id="map"></div>
@@ -45,17 +45,17 @@ h1{font-size:1.5rem;font-weight:700;letter-spacing:1px}
 </div>
 <div id="footer">
   <a href="index.html" class="back-link">← 返回警報列表</a>
-  <span>📅 2026-03-15 18:21 TPE | NCDR</span>
+  <span>📅 2026-03-18 00:00 TPE | NCDR</span>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const WARNING_AREAS = new Set([]);
 const WARNING_COUNTIES = new Set([]);
-const CIRCLE_AREAS = [{"lat": 24.30441, "lng": 120.60231, "radius_km": 5.0}];
+const CIRCLE_AREAS = [{"lat": 23.4944444444444, "lng": 121.504722222222, "radius_km": 0.5}];
 const CIRCLE_ONLY = true;
-const HEADLINE = "鐵路事故特報";
-const EFFECTIVE = "2026-03-15 16:59";
-const EXPIRES = "2026-03-15 18:30";
+const HEADLINE = "海洋污染特報";
+const EFFECTIVE = "2026-03-17 11:30";
+const EXPIRES = "2026-06-17 11:30";
 const MAP_COLOR = "#FF4444";
 
 const map = L.map('map').setView([23.7,121],7.5);
