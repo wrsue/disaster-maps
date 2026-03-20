@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CWA-EEW115002503 - 地震震度分布圖</title>
+    <title>CWA-EEW115002501 - 地震震度分布圖</title>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -89,17 +89,7 @@
     "color": "#87ceeb",
     "label": "震度 1 級"
   },
-  "基隆市": {
-    "intensity": 1,
-    "color": "#87ceeb",
-    "label": "震度 1 級"
-  },
   "新北市": {
-    "intensity": 1,
-    "color": "#87ceeb",
-    "label": "震度 1 級"
-  },
-  "桃園市": {
     "intensity": 1,
     "color": "#87ceeb",
     "label": "震度 1 級"
@@ -119,6 +109,16 @@
     "color": "#87ceeb",
     "label": "震度 1 級"
   },
+  "台中市": {
+    "intensity": 1,
+    "color": "#87ceeb",
+    "label": "震度 1 級"
+  },
+  "臺中市": {
+    "intensity": 1,
+    "color": "#87ceeb",
+    "label": "震度 1 級"
+  },
   "高雄市": {
     "intensity": 1,
     "color": "#87ceeb",
@@ -129,15 +129,10 @@
     "color": "#87ceeb",
     "label": "震度 1 級"
   },
-  "台中市": {
-    "intensity": 2,
-    "color": "#0000ff",
-    "label": "震度 2 級"
-  },
-  "臺中市": {
-    "intensity": 2,
-    "color": "#0000ff",
-    "label": "震度 2 級"
+  "宜蘭縣": {
+    "intensity": 1,
+    "color": "#87ceeb",
+    "label": "震度 1 級"
   },
   "南投縣": {
     "intensity": 2,
@@ -174,11 +169,6 @@
     "color": "#0000ff",
     "label": "震度 2 級"
   },
-  "宜蘭縣": {
-    "intensity": 2,
-    "color": "#0000ff",
-    "label": "震度 2 級"
-  },
   "台東縣": {
     "intensity": 2,
     "color": "#0000ff",
@@ -190,9 +180,9 @@
     "label": "震度 2 級"
   },
   "花蓮縣": {
-    "intensity": 4,
-    "color": "#ffff00",
-    "label": "震度 4 級"
+    "intensity": 3,
+    "color": "#00ff00",
+    "label": "震度 3 級"
   }
 };
         
@@ -304,8 +294,8 @@
                 legend.addTo(map);
                 
                 // 加入震央標記
-                const epicenterLat = 23.55;
-                const epicenterLon = 121.33;
+                const epicenterLat = 23.51;
+                const epicenterLon = 121.23;
                 
                 if (epicenterLat && epicenterLon) {
                     // 震央圖標
@@ -349,10 +339,10 @@
                 titleControl.onAdd = function(map) {
                     const div = L.DomUtil.create('div', 'info');
                     div.innerHTML = `
-                        <h4>🌍 4.8</h4>
+                        <h4>🌍 4.6</h4>
                         <p><strong>震央</strong>：花東地區</p>
-                        <p><strong>深度</strong>：20 公里</p>
-                        <p><strong>時間</strong>：2026-03-20T10:18:46+08:00</p>
+                        <p><strong>深度</strong>：10 公里</p>
+                        <p><strong>時間</strong>：2026-03-20T10:18:41+08:00</p>
                         ${epicenterLat && epicenterLon ? `<p><strong>座標</strong>：${epicenterLat.toFixed(3)}, ${epicenterLon.toFixed(3)}</p>` : ''}
                     `;
                     return div;
