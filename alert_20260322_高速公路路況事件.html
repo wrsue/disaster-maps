@@ -32,7 +32,7 @@ h1{font-size:1.5rem;font-weight:700;letter-spacing:1px}
   <div class="h-icon">⚠️</div>
   <h1>高速公路路況事件特報</h1>
   <div class="sub">
-    生效：2026-03-22 03:10 ～ 2026-03-22 03:20（TPE）｜影響：圓形警戒區 1 處｜🔴 發布中<br/>
+    生效：2026-03-22 03:10 ～ 2026-03-22 05:10（TPE）｜影響：圓形警戒區 1 處｜🔴 發布中<br/>
     資料來源：<a href="https://alerts.ncdr.nat.gov.tw" target="_blank" style="color:#4dabf7">NCDR</a> | 更新：2026-03-22 03:11
   </div>
 </div>
@@ -51,11 +51,11 @@ h1{font-size:1.5rem;font-weight:700;letter-spacing:1px}
 <script>
 const WARNING_AREAS = new Set([]);
 const WARNING_COUNTIES = new Set([]);
-const CIRCLE_AREAS = [{"lat": 25.0686550140381, "lng": 121.43692779541, "radius_km": 0.5}];
+const CIRCLE_AREAS = [{"lat": 23.7956981658936, "lng": 120.481285095215, "radius_km": 0.5}];
 const CIRCLE_ONLY = true;
 const HEADLINE = "高速公路路況事件特報";
 const EFFECTIVE = "2026-03-22 03:10";
-const EXPIRES = "2026-03-22 03:20";
+const EXPIRES = "2026-03-22 05:10";
 const MAP_COLOR = "#FF4444";
 
 const map = L.map('map').setView([23.7,121],7.5);
