@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CWA-EEW115003002 - 地震震度分布圖</title>
+    <title>CWA-EEW115003001 - 地震震度分布圖</title>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -120,14 +120,14 @@
     "label": "震度 2 級"
   },
   "高雄市": {
-    "intensity": 3,
-    "color": "#00ff00",
-    "label": "震度 3 級"
+    "intensity": 2,
+    "color": "#0000ff",
+    "label": "震度 2 級"
   },
   "屏東縣": {
-    "intensity": 3,
-    "color": "#00ff00",
-    "label": "震度 3 級"
+    "intensity": 2,
+    "color": "#0000ff",
+    "label": "震度 2 級"
   },
   "台東縣": {
     "intensity": 3,
@@ -250,7 +250,7 @@
                 
                 // 加入震央標記
                 const epicenterLat = 22.47;
-                const epicenterLon = 120.65;
+                const epicenterLon = 120.64;
                 
                 if (epicenterLat && epicenterLon) {
                     // 震央圖標
@@ -294,10 +294,10 @@
                 titleControl.onAdd = function(map) {
                     const div = L.DomUtil.create('div', 'info');
                     div.innerHTML = `
-                        <h4>🌍 4.6</h4>
+                        <h4>🌍 4.5</h4>
                         <p><strong>震央</strong>：高屏地區</p>
                         <p><strong>深度</strong>：10 公里</p>
-                        <p><strong>時間</strong>：2026-03-29T11:12:37+08:00</p>
+                        <p><strong>時間</strong>：2026-03-29T11:12:32+08:00</p>
                         ${epicenterLat && epicenterLon ? `<p><strong>座標</strong>：${epicenterLat.toFixed(3)}, ${epicenterLon.toFixed(3)}</p>` : ''}
                     `;
                     return div;
