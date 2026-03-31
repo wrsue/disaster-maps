@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CWA-EEW115003103 - 地震震度分布圖</title>
+    <title>CWA-EEW115003104 - 地震震度分布圖</title>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -294,8 +294,8 @@
                 legend.addTo(map);
                 
                 // 加入震央標記
-                const epicenterLat = 24.0;
-                const epicenterLon = 121.8;
+                const epicenterLat = 23.92;
+                const epicenterLon = 121.96;
                 
                 if (epicenterLat && epicenterLon) {
                     // 震央圖標
@@ -310,7 +310,7 @@
                         .bindPopup(`
                             <div style="text-align:center;">
                                 <strong>⭐ 震央位置</strong><br>
-                                花蓮地區<br>
+                                N/A<br>
                                 座標：${epicenterLat.toFixed(3)}, ${epicenterLon.toFixed(3)}
                             </div>
                         `)
@@ -339,8 +339,8 @@
                 titleControl.onAdd = function(map) {
                     const div = L.DomUtil.create('div', 'info');
                     div.innerHTML = `
-                        <h4>🌍 4.6</h4>
-                        <p><strong>震央</strong>：花蓮地區</p>
+                        <h4>🌍 4.7</h4>
+                        <p><strong>震央</strong>：N/A</p>
                         <p><strong>深度</strong>：20 公里</p>
                         <p><strong>時間</strong>：2026-03-31T23:44:07+08:00</p>
                         ${epicenterLat && epicenterLon ? `<p><strong>座標</strong>：${epicenterLat.toFixed(3)}, ${epicenterLon.toFixed(3)}</p>` : ''}
