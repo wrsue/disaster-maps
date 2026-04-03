@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>淹水感測器警報 - 2026-04-04 02:39</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+        #map { position: absolute; top: 70px; bottom: 0; width: 100%; }
+        #header {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: linear-gradient(135deg, #d32f2f, #ff6f00);
+            color: white; padding: 15px 20px; z-index: 1000;
+        }
+        #header h1 { margin: 0; font-size: 20px; }
+        #header p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.9; }
+        #panel {
+            position: absolute; top: 80px; right: 10px; z-index: 1000;
+            background: white; padding: 15px; border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2); max-width: 280px;
+            font-size: 13px;
+        }
+        #panel h3 { margin: 0 0 10px 0; color: #d32f2f; }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <h1>🌊 淹水感測器警報 (CAP)</h1>
+        <p>更新時間：2026-04-04 02:39 (TPE) ｜ 1 站</p>
+    </div>
+    <div id="map"></div>
+    <div id="panel">
+        <h3>⚠️ 警報站點</h3>
+        • 坑口宮海風產業道路: 10 cm
+    </div>
+    <script>
+        var map = L.map('map').setView([24.30512, 120.61131], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap'
+        }).addTo(map);
+        
+            L.circleMarker([24.30512, 120.61131], {
+                radius: 12,
+                fillColor: '#ffa726',
+                color: '#fff',
+                weight: 2,
+                fillOpacity: 0.8
+            }).addTo(map).bindPopup('<b>坑口宮海風產業道路</b><br>水深: 10 cm');
+            
+    </script>
+</body>
+</html>
