@@ -1,0 +1,95 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            121.5492556,
+            25.0907326
+          ],
+          [
+            121.5488358,
+            25.0950621
+          ],
+          [
+            121.555633,
+            25.103734
+          ],
+          [
+            121.5441355,
+            25.097133
+          ]
+        ]
+      },
+      "properties": {
+        "name": "臺北市自強隧道至至善路二段路段",
+        "route": "臺北市自強隧道 → 臺北市自強橋 → 臺北市士林區至善國中 → 臺北市士林區中影文化城",
+        "source": "semantic-geocoder",
+        "description": "臺北市自強隧道、自強橋、至善路二段(至善國中至中影製片廠)雙向路段"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5492556,
+          25.0907326
+        ]
+      },
+      "properties": {
+        "name": "Ziqiang Tunnel, Taipei City, Taiwan",
+        "query": "臺北市自強隧道",
+        "source": "semantic-geocoder"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5488358,
+          25.0950621
+        ]
+      },
+      "properties": {
+        "name": "Ziqiang Bridge, Shilin District, Taipei City, Taiwan 111",
+        "query": "臺北市自強橋",
+        "source": "semantic-geocoder"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.555633,
+          25.103734
+        ]
+      },
+      "properties": {
+        "name": "Taipei Municipal Zhishan Junior High School, Shilin District, Taipei City, Taiwan 111",
+        "query": "臺北市士林區至善國中",
+        "source": "semantic-geocoder"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          121.5441355,
+          25.097133
+        ]
+      },
+      "properties": {
+        "name": "111, Taiwan, Taipei City, Shilin District, 中影文化城",
+        "query": "臺北市士林區中影文化城",
+        "source": "semantic-geocoder"
+      }
+    }
+  ]
+}
